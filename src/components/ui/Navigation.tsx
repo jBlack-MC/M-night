@@ -46,7 +46,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
 
   const handleNavClick = (sectionName: SectionName) => {
     if (window.__cameraNav) {
-      (window as any).__cameraNav.goTo(sectionName);
+      window.__cameraNav.goTo(sectionName);
       onNavigate?.(sectionName);
     }
   };

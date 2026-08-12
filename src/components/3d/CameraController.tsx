@@ -27,7 +27,7 @@ const easeInOutCubic = (value: number) =>
 
 export default function CameraController() {
   const { camera } = useThree();
-  const perspectiveCamera = camera as THREE.PerspectiveCamera;
+  const cameraRef = useRef(camera as THREE.PerspectiveCamera);
   const [currentSection, setCurrentSection] = useState<SectionName>("hero");
   const targetRef = useRef(new THREE.Vector3(...defaultCamera.camera.target));
   const transitionRef = useRef<Transition | null>(null);
@@ -42,14 +42,8 @@ export default function CameraController() {
   }, []);
 
   useEffect(() => {
-    perspectiveCamera.position.set(...defaultCamera.camera.position);
-    perspectiveCamera.fov = defaultCamera.camera.fov;
-    perspectiveCamera.lookAt(targetRef.current);
-    perspectiveCamera.updateProjectionMatrix();
-  }, [perspectiveCamera]);
-
-  useEffect(() => {
     const preset = cameraPresets[currentSection];
+    const perspectiveCamera = cameraRef.current;
     transitionRef.current = {
       fromPosition: perspectiveCamera.position.clone(),
       fromTarget: targetRef.current.clone(),
@@ -63,11 +57,12 @@ export default function CameraController() {
     window.dispatchEvent(
       new CustomEvent("camera-section-change", { detail: currentSection }),
     );
-  }, [currentSection, perspectiveCamera]);
+  }, [currentSection]);
 
   useFrame((_, delta) => {
     const transition = transitionRef.current;
     if (!transition) return;
+    const perspectiveCamera = cameraRef.current;
 
     transition.elapsed = Math.min(transition.elapsed + delta, TRANSITION_DURATION);
     const progress = easeInOutCubic(transition.elapsed / TRANSITION_DURATION);
