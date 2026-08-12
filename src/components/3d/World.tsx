@@ -1,31 +1,37 @@
 /**
- * PHASE 2: Camera & Navigation
+ * PHASE 3: Hero World & Navigation
  * 
  * World Component - The core 3D environment with controlled camera
  * 
  * Structure:
  * World
+ *  ├── HeroSection (PHASE 3 - entry overlay)
  *  ├── Canvas (fullscreen)
  *  ├── CameraController (guided camera navigation)
  *  ├── Lights
  *  ├── Chessboard
- *  └── Pawn
+ *  ├── Pawn
+ *  └── Navigation (UI)
  */
 
 import { Canvas } from "@react-three/fiber";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import CameraController from "./CameraController";
 import Pawn from "./Pawn";
 import ChessBoard from "./ChessBoard";
 import Navigation from "../ui/Navigation";
+import HeroSection from "../sections/HeroSection";
 
 export default function World() {
+  const [heroComplete, setHeroComplete] = useState(false);
+
   useEffect(() => {
     console.log("🌍 World Component Mounted");
-    console.log("PHASE 2: Camera & Navigation initialized");
+    console.log("PHASE 3: Hero World & Navigation initialized");
     console.log("=====================================");
     console.log("Features:");
+    console.log("  ✓ Hero section entry experience");
     console.log("  ✓ Controlled camera system");
     console.log("  ✓ Smooth transitions between sections");
     console.log("  ✓ Guided narrative experience");
@@ -36,8 +42,11 @@ export default function World() {
 
   return (
     <>
+      {/* Hero Section Overlay - PHASE 3 entry experience */}
+      <HeroSection onEnter={() => setHeroComplete(true)} />
+
       {/* Navigation UI - Overlays on top of 3D scene */}
-      <Navigation />
+      {heroComplete && <Navigation />}
 
       {/* 3D Scene */}
       <Canvas

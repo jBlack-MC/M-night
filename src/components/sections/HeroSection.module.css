@@ -1,0 +1,223 @@
+/**
+ * Hero Section Styling - PHASE 3
+ * 
+ * Glassmorphic overlay with elegant typography
+ * Minimal, readable text over 3D world
+ */
+
+.heroOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+/* Gradient background - semi-transparent overlay */
+.gradientBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(17, 17, 17, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
+  backdrop-filter: blur(2px);
+  z-index: -1;
+}
+
+/* Main content container */
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  text-align: center;
+  pointer-events: auto;
+}
+
+/* Title */
+.titleGroup {
+  opacity: 0;
+}
+
+.title {
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Pawn symbol */
+.pawnSymbol {
+  font-size: clamp(4rem, 12vw, 8rem);
+  color: #e0d5b7;
+  text-shadow: 0 0 30px rgba(224, 213, 183, 0.4);
+  opacity: 0;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Subtitle */
+.subtitleGroup {
+  opacity: 0;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: #b0b0b0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Description */
+.descriptionGroup {
+  opacity: 0;
+}
+
+.description {
+  font-size: clamp(0.95rem, 2vw, 1.25rem);
+  font-weight: 400;
+  color: #d0d0d0;
+  line-height: 1.8;
+  max-width: 400px;
+}
+
+.description p {
+  margin: 0.5rem 0;
+}
+
+/* CTA Button */
+.ctaGroup {
+  opacity: 0;
+  margin-top: 1rem;
+}
+
+.ctaButton {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+.ctaButton:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+}
+
+.ctaButton:active {
+  transform: translateY(0px);
+}
+
+.ctaButton span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Hint text */
+.hint {
+  position: absolute;
+  bottom: 2rem;
+  color: #909090;
+  font-size: 0.9rem;
+  opacity: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.hint p {
+  margin: 0;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Fade in animation */
+.fadeIn {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .heroContent {
+    gap: 1.5rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 8vw, 4rem);
+  }
+
+  .pawnSymbol {
+    font-size: clamp(3rem, 10vw, 6rem);
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+  }
+
+  .description {
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+    max-width: 300px;
+  }
+
+  .ctaButton {
+    padding: 0.75rem 2rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroContent {
+    gap: 1rem;
+  }
+
+  .hint {
+    font-size: 0.8rem;
+  }
+}

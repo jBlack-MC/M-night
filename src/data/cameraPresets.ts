@@ -16,7 +16,7 @@ export interface CameraPreset {
   };
 }
 
-export const cameraPresets: Record<string, CameraPreset> = {
+export const cameraPresets = {
   // Hero/Title Camera - Wide shot of the board and pawn
   hero: {
     name: "hero",
@@ -76,13 +76,15 @@ export const cameraPresets: Record<string, CameraPreset> = {
       fov: 54,
     },
   },
-};
+} satisfies Record<string, CameraPreset>;
+
+export type SectionName = keyof typeof cameraPresets;
 
 // Default camera (entry point)
 export const defaultCamera = cameraPresets.hero;
 
 // Get all section names in order
-export const sectionOrder: Array<keyof typeof cameraPresets> = [
+export const sectionOrder: SectionName[] = [
   "hero",
   "about",
   "skills",
