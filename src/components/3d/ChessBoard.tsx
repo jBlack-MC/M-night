@@ -1,24 +1,25 @@
 import { useGLTF } from "@react-three/drei";
-import { useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
+import { storyScenes } from "../../data/storyScenes";
 
-export default function ChessBoard() {
-  const { scene } = useGLTF("/models/chessboard.glb");
+const boardModelPath = storyScenes.SCENE_02_EMPTY_BOARD.modelPath;
+
+interface ChessBoardProps {
+  progress: number;
+}
+
+export default function ChessBoard({ progress }: ChessBoardProps) {
+  const { scene } = useGLTF(boardModelPath);
+  const boardRef = useRef<THREE.Group>(null);
 
   const board = useMemo(() => {
     const model = scene.clone(true);
 
-    console.log("📋 ChessBoard Component - Hierarchy Analysis");
-    console.log("─────────────────────────────────────────");
-    
-    model.children.forEach((child, index) => {
-      console.log(`  [${index}] ${child.name}`);
-    });
-
-    // Find and remove unwanted objects
     function removeUnwantedNodes(node: THREE.Object3D): void {
       const nodesToRemove: THREE.Object3D[] = [];
-      
+
       node.children.forEach((child) => {
         if (child.name === "Camera" || child.name === "BetterChessboard") {
           nodesToRemove.push(child);
@@ -26,33 +27,33 @@ export default function ChessBoard() {
           removeUnwantedNodes(child);
         }
       });
-      
+
       nodesToRemove.forEach((child) => {
         node.remove(child);
-        console.log(`  🗑️  Removed: "${child.name}"`);
       });
     }
 
     removeUnwantedNodes(model);
-
-    console.log("─────────────────────────────────────────");
-    console.log("After filtering:");
-    model.children.forEach((child, index) => {
-      console.log(`  [${index}] ${child.name} ✓`);
-    });
-
-    console.log("✓ ChessBoard ready (scale 0.1)");
-    console.log("");
-
     return model;
   }, [scene]);
 
-  return (
-    <primitive
-      object={board}
-      scale={0.1}
-    />
-  );
+  useFrame(() => {
+    if (!boardRef.current) return;
+
+    const reveal = THREE.MathUtils.clamp(progress, 0, 1);
+    const ease = THREE.MathUtils.smoothstep(reveal, 0, 1);
+
+    boardRef.current.position.set(
+      0,
+      THREE.MathUtils.lerp(-0.45, 0.02, ease),
+      THREE.MathUtils.lerp(-0.9, 0, ease)
+    );
+    boardRef.current.scale.setScalar(THREE.MathUtils.lerp(0.015, 0.1, ease));
+    boardRef.current.rotation.y = THREE.MathUtils.lerp(-0.45, 0, ease);
+    boardRef.current.visible = reveal > 0.02;
+  });
+
+  return <primitive ref={boardRef} object={board} />;
 }
 
-useGLTF.preload("/models/chessboard.glb");
+useGLTF.preload(boardModelPath);

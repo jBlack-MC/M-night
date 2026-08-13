@@ -50,8 +50,10 @@ Experience a guided narrative journey through a chess-themed portfolio where a p
 M-Night/
 ├── public/
 │   └── models/
-│       ├── pawn.glb
-│       └── chessboard.glb
+│       ├── pawn_solo.glb
+│       ├── board_empty.glb
+│       ├── board_setup.glb      # planned story asset
+│       └── board_battle.glb     # planned story asset
 │
 ├── src/
 │   ├── components/
@@ -164,7 +166,7 @@ const TRANSITION_DURATION = 2; // seconds
 
 ## 🐛 Known Limitations
 
-- Placeholder pawn model (replace `public/models/pawn.glb` with actual chess pawn)
+- Placeholder pawn model (replace `public/models/pawn_solo.glb` with the final chess pawn)
 - No keyboard navigation yet (arrow keys, etc.)
 - No mobile touch gestures for navigation
 - No custom transition curves per section
