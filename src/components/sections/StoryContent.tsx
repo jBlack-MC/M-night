@@ -22,7 +22,9 @@ export default function StoryContent({ storyProgress }: StoryContentProps) {
   const heroOpacity = 1 - calculateFade(storyProgress, ANIMATION_TIMING.heroText.fadeOutStart, ANIMATION_TIMING.heroText.fadeOutEnd);
   const worldOpacity = calculateFade(storyProgress, 0.18, 0.38) * (1 - calculateFade(storyProgress, 0.4, 0.52));
   const playerOpacity = calculateFade(storyProgress, 0.38, 0.62);
-  const journeyOpacity = calculateFade(storyProgress, 0.57, 0.82);
+  const skillsOpacity = calculateFade(storyProgress, 0.5, 0.7);
+  const projectsOpacity = calculateFade(storyProgress, 0.64, 0.84);
+  const journeyOpacity = calculateFade(storyProgress, 0.78, 0.98);
 
   return (
     <main className={styles.story}>
@@ -46,7 +48,7 @@ export default function StoryContent({ storyProgress }: StoryContentProps) {
 
       <section id="player" className={`${styles.chapter} ${styles.contentChapter}`}>
         <article className={styles.panel} style={{ opacity: playerOpacity }}>
-          <p className={styles.eyebrow}>SCENE 02 — THE PLAYER</p>
+          <p className={styles.eyebrow}>SCENE 04 — THE PLAYER</p>
           <h2>I'M CLARITY.</h2>
           <p>
             I build software with a practical mindset: solving problems, learning quickly,
@@ -55,9 +57,33 @@ export default function StoryContent({ storyProgress }: StoryContentProps) {
         </article>
       </section>
 
+      <section id="skills" className={`${styles.chapter} ${styles.contentChapter}`}>
+        <article className={styles.panel} style={{ opacity: skillsOpacity }}>
+          <p className={styles.eyebrow}>SCENE 05 — THE SKILLSET</p>
+          <h2>TOOLS FOR THE NEXT MOVE.</h2>
+          <ul>
+            <li>TypeScript and React interfaces</li>
+            <li>Three.js and interactive 3D systems</li>
+            <li>Accessible, responsive product experiences</li>
+            <li>Clear systems thinking from idea to release</li>
+          </ul>
+        </article>
+      </section>
+
+      <section id="projects" className={`${styles.chapter} ${styles.contentChapter}`}>
+        <article className={styles.panel} style={{ opacity: projectsOpacity }}>
+          <p className={styles.eyebrow}>SCENE 06 — THE WORK</p>
+          <h2>BUILT ONE MOVE AT A TIME.</h2>
+          <p>
+            Selected projects will live here: focused experiments, useful systems, and products
+            shaped through iteration.
+          </p>
+        </article>
+      </section>
+
       <section id="journey" className={`${styles.chapter} ${styles.contentChapter}`}>
         <article className={styles.panel} style={{ opacity: journeyOpacity }}>
-          <p className={styles.eyebrow}>SCENE 03 — THE JOURNEY</p>
+          <p className={styles.eyebrow}>SCENE 07 — THE JOURNEY</p>
           <h2>THE NEXT MOVE.</h2>
           <ul>
             <li>Move 1 — Education and fundamentals</li>

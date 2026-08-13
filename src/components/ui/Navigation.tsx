@@ -13,23 +13,29 @@ import {
 } from "../../data/cameraPresets";
 import styles from "./Navigation.module.css";
 
+const sectionScrollPositions: Record<SectionName, number> = {
+  hero: 0,
+  about: 0.48,
+  skills: 0.64,
+  projects: 0.78,
+  contact: 1,
+};
+
+const getClosestSection = (progress: number): SectionName => Object.entries(sectionScrollPositions)
+  .reduce<SectionName>((closest, [name, position]) => {
+    return Math.abs(position - progress) < Math.abs(sectionScrollPositions[closest] - progress)
+      ? name as SectionName
+      : closest;
+  }, "hero");
+
 interface NavigationProps {
+  storyProgress: number;
   onNavigate?: (section: SectionName) => void;
 }
 
-export default function Navigation({ onNavigate }: NavigationProps) {
-  const [currentSection, setCurrentSection] = useState<SectionName>("hero");
+export default function Navigation({ storyProgress, onNavigate }: NavigationProps) {
+  const currentSection = getClosestSection(storyProgress);
   const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    const handleSectionChange = (event: Event) => {
-      const section = (event as CustomEvent<SectionName>).detail;
-      setCurrentSection(section);
-    };
-
-    window.addEventListener("camera-section-change", handleSectionChange);
-    return () => window.removeEventListener("camera-section-change", handleSectionChange);
-  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -45,10 +51,12 @@ export default function Navigation({ onNavigate }: NavigationProps) {
   }, [currentSection]);
 
   const handleNavClick = (sectionName: SectionName) => {
-    if (window.__cameraNav) {
-      window.__cameraNav.goTo(sectionName);
-      onNavigate?.(sectionName);
-    }
+    const distance = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPosition = distance * sectionScrollPositions[sectionName];
+
+    window.scrollTo({ top: scrollPosition, behavior: "smooth" });
+    window.__cameraNav?.goTo(sectionName);
+    onNavigate?.(sectionName);
   };
 
   const toggleVisibility = () => {

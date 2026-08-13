@@ -10,29 +10,20 @@ import { Suspense } from "react";
 
 import CameraController from "./CameraController";
 import Pawn from "./Pawn";
-import ChessBoard from "./ChessBoard";
+import GameBoard from "./GameBoard";
 import StoryContent from "../sections/StoryContent";
 import { LIGHTING, CAMERA_CLOSE } from "../../data/sceneConstants";
-import { normalizeStoryProgress, useScrollProgress } from "../../hooks/useScrollProgress";
+import styles from "./World.module.css";
 
-export default function World() {
-  const scrollProgress = useScrollProgress();
-  const storyProgress = normalizeStoryProgress(scrollProgress);
+interface WorldProps {
+  storyProgress: number;
+}
+
+export default function World({ storyProgress }: WorldProps) {
 
   return (
     <>
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          width: "100%",
-          zIndex: 0,
-          pointerEvents: "none",
-          overflow: "hidden",
-          background: LIGHTING.backgroundColor,
-        }}
-      >
+      <div className={styles.worldViewport} aria-label="Interactive 3D story scene">
         <Canvas
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
           camera={{
@@ -72,7 +63,7 @@ export default function World() {
           </mesh>
 
           <Suspense fallback={null}>
-            <ChessBoard progress={storyProgress} />
+            <GameBoard progress={storyProgress} />
             <Pawn progress={storyProgress} />
           </Suspense>
         </Canvas>

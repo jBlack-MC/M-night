@@ -15,14 +15,10 @@ interface LoadingScreenProps {
 
 export default function LoadingScreen({ isLoading, onComplete }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
-  const [showMessage, setShowMessage] = useState(false);
+  const showMessage = !isLoading;
 
   useEffect(() => {
     if (!isLoading) {
-      // When loading completes, show completion message
-      setShowMessage(true);
-      setProgress(100);
-
       // Fade out after a moment
       const timer = setTimeout(() => {
         onComplete?.();
@@ -31,9 +27,6 @@ export default function LoadingScreen({ isLoading, onComplete }: LoadingScreenPr
       return () => clearTimeout(timer);
     } else {
       // Simulate loading progress
-      setShowMessage(false);
-      setProgress(0);
-
       let current = 0;
       const interval = setInterval(() => {
         current += Math.random() * 35;
@@ -49,8 +42,8 @@ export default function LoadingScreen({ isLoading, onComplete }: LoadingScreenPr
     <div
       className={styles.loadingScreen}
       style={{
-        opacity: showMessage && progress === 100 ? 0 : 1,
-        pointerEvents: showMessage && progress === 100 ? "none" : "auto",
+        opacity: showMessage ? 0 : 1,
+        pointerEvents: showMessage ? "none" : "auto",
       }}
     >
       <div className={styles.content}>
@@ -60,7 +53,7 @@ export default function LoadingScreen({ isLoading, onComplete }: LoadingScreenPr
           <p className={styles.loading}>
             {showMessage ? "YOUR MOVE" : "LOADING THE BOARD"}
           </p>
-          {!showMessage && <div className={styles.progress}>{Math.round(progress)}%</div>}
+            {!showMessage && <div className={styles.progress}>{Math.round(progress)}%</div>}
         </div>
 
         {/* Progress bar */}
