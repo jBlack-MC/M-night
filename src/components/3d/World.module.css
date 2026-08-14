@@ -1,14 +1,15 @@
 .worldViewport {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 54vw;
-  height: 100vh;
-  z-index: 1;
+  position: sticky;
+  top: 1rem;
+  width: calc(100% - 2rem);
+  height: calc(100svh - 2rem);
+  margin: 0 1rem;
+  z-index: 3;
   overflow: hidden;
-  pointer-events: none;
+  pointer-events: auto;
   background: #080808;
-  border-left: 1px solid rgb(225 210 176 / 0.2);
+  border: 1px solid rgb(225 210 176 / 0.28);
+  box-shadow: 0 2rem 6rem rgb(0 0 0 / 0.42);
 }
 
 .worldViewport::before {
@@ -22,12 +23,10 @@
 
 @media (max-width: 800px) {
   .worldViewport {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    height: 58svh;
-    border-left: 0;
-    border-bottom: 1px solid rgb(225 210 176 / 0.2);
+    top: 0.5rem;
+    width: calc(100% - 1rem);
+    height: calc(100svh - 1rem);
+    margin: 0 0.5rem;
   }
 
   .worldViewport::before {

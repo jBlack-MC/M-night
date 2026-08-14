@@ -29,7 +29,7 @@ export const storyScenes = [
     start: 0.2,
     end: 0.45,
     modelPath: "/models/board_empty.glb",
-    camera: { position: [1, 0.75, 1.3], target: [0, 0.25, 0], fov: 44 },
+    camera: { position: [0.7, 0.56, 0.92], target: [0.08, 0.16, 0.08], fov: 40 },
   },
   {
     id: "player",
@@ -37,7 +37,7 @@ export const storyScenes = [
     description: "The pawn finds its place in the world",
     start: 0.45,
     end: 0.7,
-    camera: { position: [1.18, 0.83, 1.42], target: [0, 0.16, 0], fov: 48 },
+    camera: { position: [0.82, 0.64, 1.02], target: [0.1, 0.16, 0.08], fov: 44 },
   },
   {
     id: "first-move",
@@ -45,7 +45,7 @@ export const storyScenes = [
     description: "The journey begins one move at a time",
     start: 0.7,
     end: 1,
-    camera: { position: [1.35, 0.95, 1.55], target: [0, 0.05, 0], fov: 52 },
+    camera: { position: [0.96, 0.72, 1.18], target: [0.12, 0.14, 0.08], fov: 48 },
   },
 ] satisfies StoryScene[];
 

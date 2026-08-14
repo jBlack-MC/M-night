@@ -28,19 +28,22 @@ export default function CameraController({ progress }: CameraControllerProps) {
     const currentIndex = sceneIndex === -1 ? storyScenes.length - 1 : sceneIndex;
     const currentScene = storyScenes[currentIndex];
     const nextScene = storyScenes[Math.min(currentIndex + 1, storyScenes.length - 1)];
-    const sceneProgress = getSceneProgress(storyProgress, currentScene);
-    const transition = THREE.MathUtils.smoothstep(sceneProgress, 0.35, 1);
+    const segmentProgress = THREE.MathUtils.smoothstep(
+      getSceneProgress(storyProgress, currentScene),
+      0,
+      1,
+    );
 
     const position = new THREE.Vector3().lerpVectors(
       new THREE.Vector3(...currentScene.camera.position),
       new THREE.Vector3(...nextScene.camera.position),
-      transition
+      segmentProgress
     );
 
     const targetPoint = new THREE.Vector3().lerpVectors(
       new THREE.Vector3(...currentScene.camera.target),
       new THREE.Vector3(...nextScene.camera.target),
-      transition
+      segmentProgress
     );
     targetPoint.x += THREE.MathUtils.lerp(
       MODEL_TRANSFORMS.pawn.start[0],
@@ -51,7 +54,7 @@ export default function CameraController({ progress }: CameraControllerProps) {
     const fov = THREE.MathUtils.lerp(
       currentScene.camera.fov,
       nextScene.camera.fov,
-      transition
+      segmentProgress
     );
 
     const driftX = Math.sin(storyProgress * Math.PI * 2) * 0.035;

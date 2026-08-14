@@ -14,14 +14,14 @@ export const LIGHTING = {
    * Background color — very dark
    * #080808 = slightly warmer than pure black
    */
-  backgroundColor: "#080808",
+  backgroundColor: "#1a1b19",
 
   /**
    * Ambient light — provides base illumination
    * Low intensity so spotlight is the hero
    */
   ambient: {
-    intensity: 0.22,
+    intensity: 0.62,
     color: "#ffffff",
   },
 
@@ -31,7 +31,7 @@ export const LIGHTING = {
    */
   spotlight: {
     position: [1.5, 4, 2] as [number, number, number],
-    intensity: 10,
+    intensity: 18,
     angle: 0.35,
     penumbra: 0.8,
     color: "#ffffff",
@@ -44,8 +44,8 @@ export const LIGHTING = {
    */
   rimLight: {
     position: [-3, 2, -2] as [number, number, number],
-    intensity: 0.65,
-    color: "#c8d0ff", // Cool blue-white tone
+    intensity: 1.15,
+    color: "#d5d9c8", // Neutral rim light for model separation
   },
 
   /**
@@ -53,8 +53,8 @@ export const LIGHTING = {
    */
   fillLight: {
     position: [2, 0.5, -1] as [number, number, number],
-    intensity: 0.3,
-    color: "#f0e8d8", // Warm tone
+    intensity: 0.8,
+    color: "#f4e6c8", // Warm tone
   },
 } as const;
 // ============================================================================

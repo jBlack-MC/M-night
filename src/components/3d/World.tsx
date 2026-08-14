@@ -27,6 +27,9 @@ export default function World({ storyProgress }: WorldProps) {
       <div className={styles.worldViewport} aria-label="Interactive 3D story scene">
         <Canvas
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
+          onCreated={({ gl }) => {
+            gl.toneMappingExposure = 1.35;
+          }}
           camera={{
             position: storyScenes[0].camera.position,
             fov: storyScenes[0].camera.fov,
@@ -60,7 +63,7 @@ export default function World({ storyProgress }: WorldProps) {
 
           <mesh rotation-x={-Math.PI / 2} position={[0, -0.52, 0]} receiveShadow>
             <circleGeometry args={[2.8, 64]} />
-            <meshStandardMaterial color="#0d0d0d" transparent opacity={0.52 + storyProgress * 0.1} />
+            <meshStandardMaterial color="#30322c" transparent opacity={0.68 + storyProgress * 0.08} />
           </mesh>
 
           <Suspense fallback={null}>
