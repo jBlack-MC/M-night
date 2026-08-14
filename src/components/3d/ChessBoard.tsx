@@ -29,6 +29,22 @@ export default function ChessBoard() {
     }
 
     removeUnwantedNodes(model);
+
+    model.traverse((child) => {
+      if (!(child instanceof THREE.Mesh)) return;
+
+      const adjustMaterial = (source: THREE.Material): THREE.Material => {
+        const material = source.clone() as THREE.MeshStandardMaterial;
+        material.color.set(material.name === "blacksquare" ? "#3a3d36" : "#d7d2c1");
+        material.roughness = 0.72;
+        return material;
+      };
+
+      child.material = Array.isArray(child.material)
+        ? child.material.map(adjustMaterial)
+        : adjustMaterial(child.material);
+    });
+
     return model;
   }, [scene]);
 

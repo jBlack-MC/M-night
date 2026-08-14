@@ -15,7 +15,27 @@ export default function Pawn({ progress }: PawnProps) {
   const { scene } = useGLTF(pawnModelPath);
   const pawnRef = useRef<THREE.Group>(null);
 
-  const pawn = useMemo(() => scene.clone(true), [scene]);
+  const pawn = useMemo(() => {
+    const model = scene.clone(true);
+
+    model.traverse((child) => {
+      if (!(child instanceof THREE.Mesh)) return;
+
+      const brightenMaterial = (source: THREE.Material): THREE.Material => {
+        const material = source.clone() as THREE.MeshStandardMaterial;
+        material.color.set("#c7c1ae");
+        material.roughness = 0.58;
+        material.metalness = 0.05;
+        return material;
+      };
+
+      child.material = Array.isArray(child.material)
+        ? child.material.map(brightenMaterial)
+        : brightenMaterial(child.material);
+    });
+
+    return model;
+  }, [scene]);
 
   useFrame(() => {
     if (!pawnRef.current) return;
