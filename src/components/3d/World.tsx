@@ -12,7 +12,8 @@ import CameraController from "./CameraController";
 import Pawn from "./Pawn";
 import GameBoard from "./GameBoard";
 import StoryContent from "../sections/StoryContent";
-import { LIGHTING, CAMERA_CLOSE } from "../../data/sceneConstants";
+import { LIGHTING } from "../../data/sceneConstants";
+import { storyScenes } from "../../data/storyScenes";
 import styles from "./World.module.css";
 
 interface WorldProps {
@@ -27,8 +28,8 @@ export default function World({ storyProgress }: WorldProps) {
         <Canvas
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
           camera={{
-            position: CAMERA_CLOSE.position.toArray(),
-            fov: CAMERA_CLOSE.fov,
+            position: storyScenes[0].camera.position,
+            fov: storyScenes[0].camera.fov,
             near: 0.01,
             far: 100,
           }}

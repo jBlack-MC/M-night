@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
-export const STORY_SCROLL_END = 0.38;
+export const STORY_SCROLL_END = 1;
 
 const getProgress = () => {
-  const distance = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollElement = document.scrollingElement ?? document.documentElement;
+  const distance = scrollElement.scrollHeight - window.innerHeight;
   return distance > 0 ? Math.min(window.scrollY / distance, 1) : 0;
 };
 

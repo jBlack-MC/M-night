@@ -6,57 +6,38 @@
  */
 
 import { useEffect, useState } from "react";
-import {
-  cameraPresets,
-  sectionOrder,
-  type SectionName,
-} from "../../data/cameraPresets";
+import { getStoryScene, storyScenes, type StorySceneId } from "../../data/storyScenes";
 import styles from "./Navigation.module.css";
-
-const sectionScrollPositions: Record<SectionName, number> = {
-  hero: 0,
-  about: 0.48,
-  skills: 0.64,
-  projects: 0.78,
-  contact: 1,
-};
-
-const getClosestSection = (progress: number): SectionName => Object.entries(sectionScrollPositions)
-  .reduce<SectionName>((closest, [name, position]) => {
-    return Math.abs(position - progress) < Math.abs(sectionScrollPositions[closest] - progress)
-      ? name as SectionName
-      : closest;
-  }, "hero");
 
 interface NavigationProps {
   storyProgress: number;
-  onNavigate?: (section: SectionName) => void;
+  onNavigate?: (section: StorySceneId) => void;
 }
 
 export default function Navigation({ storyProgress, onNavigate }: NavigationProps) {
-  const currentSection = getClosestSection(storyProgress);
+  const currentSection = getStoryScene(storyProgress);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
       const offset = event.key === "ArrowRight" ? 1 : -1;
-      const index = sectionOrder.indexOf(currentSection);
-      const next = sectionOrder[(index + offset + sectionOrder.length) % sectionOrder.length];
-      window.__cameraNav?.goTo(next);
+      const index = storyScenes.indexOf(currentSection);
+      const next = storyScenes[(index + offset + storyScenes.length) % storyScenes.length];
+      const distance = document.documentElement.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: distance * next.start, behavior: "smooth" });
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentSection]);
 
-  const handleNavClick = (sectionName: SectionName) => {
+  const handleNavClick = (section: typeof storyScenes[number]) => {
     const distance = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPosition = distance * sectionScrollPositions[sectionName];
+    const scrollPosition = distance * section.start;
 
     window.scrollTo({ top: scrollPosition, behavior: "smooth" });
-    window.__cameraNav?.goTo(sectionName);
-    onNavigate?.(sectionName);
+    onNavigate?.(section.id);
   };
 
   const toggleVisibility = () => {
@@ -73,21 +54,20 @@ export default function Navigation({ storyProgress, onNavigate }: NavigationProp
 
           {/* Navigation Buttons */}
           <div className={styles.sections}>
-            {sectionOrder.map((sectionKey) => {
-              const preset = cameraPresets[sectionKey];
-              const isActive = currentSection === sectionKey;
+            {storyScenes.map((section) => {
+              const isActive = currentSection.id === section.id;
 
               return (
                 <button
-                  key={sectionKey}
+                  key={section.id}
                   className={`${styles.navButton} ${
                     isActive ? styles.active : ""
                   }`}
-                  onClick={() => handleNavClick(sectionKey)}
-                  title={preset.description}
+                  onClick={() => handleNavClick(section)}
+                  title={section.description}
                   aria-current={isActive ? "page" : undefined}
                 >
-                  {preset.label}
+                  {section.label}
                 </button>
               );
             })}
@@ -119,7 +99,7 @@ export default function Navigation({ storyProgress, onNavigate }: NavigationProp
       {/* Section Indicator */}
       <div className={`${styles.indicator} ${!isVisible ? styles.hidden : ""}`}>
         <span className={styles.label}>
-          {cameraPresets[currentSection]?.description || ""}
+          {currentSection.description}
         </span>
       </div>
     </>
