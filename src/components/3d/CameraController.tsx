@@ -1,104 +1,70 @@
+/**
+ * CAMERA CONTROLLER — Stage 1: The Beginning
+ *
+ * Manages smooth cinematic camera transitions driven by scroll progress.
+ *
+ * The scroll-driven story is now treated as a single normalized timeline.
+ */
+
 import { useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import {
-  cameraPresets,
-  defaultCamera,
-  sectionOrder,
-  type SectionName,
-} from "../../data/cameraPresets";
+import { getSceneProgress, storyScenes } from "../../data/storyScenes";
+import { MODEL_TRANSFORMS } from "../../data/sceneConstants";
 
-const TRANSITION_DURATION = 2;
-
-interface Transition {
-  fromPosition: THREE.Vector3;
-  fromTarget: THREE.Vector3;
-  fromFov: number;
-  toPosition: THREE.Vector3;
-  toTarget: THREE.Vector3;
-  toFov: number;
-  elapsed: number;
+interface CameraControllerProps {
+  progress: number;
 }
 
-const easeInOutCubic = (value: number) =>
-  value < 0.5
-    ? 4 * value * value * value
-    : 1 - Math.pow(-2 * value + 2, 3) / 2;
-
-export default function CameraController() {
+export default function CameraController({ progress }: CameraControllerProps) {
   const { camera } = useThree();
   const cameraRef = useRef(camera as THREE.PerspectiveCamera);
-  const [currentSection, setCurrentSection] = useState<SectionName>("hero");
-  const targetRef = useRef(new THREE.Vector3(...defaultCamera.camera.target));
-  const transitionRef = useRef<Transition | null>(null);
+  const target = useMemo(() => new THREE.Vector3(), []);
 
-  const goTo = useCallback((section: string) => {
-    if (!(section in cameraPresets)) {
-      console.warn(`Unknown camera section: "${section}"`);
-      return;
-    }
+  useFrame(() => {
+    const storyProgress = Math.min(Math.max(progress, 0), 1);
 
-    setCurrentSection(section as SectionName);
-  }, []);
+    const sceneIndex = storyScenes.findIndex((scene) => storyProgress < scene.end);
+    const currentIndex = sceneIndex === -1 ? storyScenes.length - 1 : sceneIndex;
+    const currentScene = storyScenes[currentIndex];
+    const nextScene = storyScenes[Math.min(currentIndex + 1, storyScenes.length - 1)];
+    const sceneProgress = getSceneProgress(storyProgress, currentScene);
+    const transition = THREE.MathUtils.smoothstep(sceneProgress, 0.35, 1);
 
-  useEffect(() => {
-    const preset = cameraPresets[currentSection];
+    const position = new THREE.Vector3().lerpVectors(
+      new THREE.Vector3(...currentScene.camera.position),
+      new THREE.Vector3(...nextScene.camera.position),
+      transition
+    );
+
+    const targetPoint = new THREE.Vector3().lerpVectors(
+      new THREE.Vector3(...currentScene.camera.target),
+      new THREE.Vector3(...nextScene.camera.target),
+      transition
+    );
+    targetPoint.x += THREE.MathUtils.lerp(
+      MODEL_TRANSFORMS.pawn.start[0],
+      MODEL_TRANSFORMS.pawn.end[0],
+      THREE.MathUtils.smoothstep(getSceneProgress(storyProgress, storyScenes[3]), 0, 1)
+    ) * 0.35;
+
+    const fov = THREE.MathUtils.lerp(
+      currentScene.camera.fov,
+      nextScene.camera.fov,
+      transition
+    );
+
+    const driftX = Math.sin(storyProgress * Math.PI * 2) * 0.035;
+    const driftY = Math.sin(storyProgress * Math.PI * 2 + 0.6) * 0.025;
+    const driftZ = Math.cos(storyProgress * Math.PI * 2) * 0.02;
+
     const perspectiveCamera = cameraRef.current;
-    transitionRef.current = {
-      fromPosition: perspectiveCamera.position.clone(),
-      fromTarget: targetRef.current.clone(),
-      fromFov: perspectiveCamera.fov,
-      toPosition: new THREE.Vector3(...preset.camera.position),
-      toTarget: new THREE.Vector3(...preset.camera.target),
-      toFov: preset.camera.fov,
-      elapsed: 0,
-    };
-
-    window.dispatchEvent(
-      new CustomEvent("camera-section-change", { detail: currentSection }),
-    );
-  }, [currentSection]);
-
-  useFrame((_, delta) => {
-    const transition = transitionRef.current;
-    if (!transition) return;
-    const perspectiveCamera = cameraRef.current;
-
-    transition.elapsed = Math.min(transition.elapsed + delta, TRANSITION_DURATION);
-    const progress = easeInOutCubic(transition.elapsed / TRANSITION_DURATION);
-
-    perspectiveCamera.position.lerpVectors(
-      transition.fromPosition,
-      transition.toPosition,
-      progress,
-    );
-    targetRef.current.lerpVectors(
-      transition.fromTarget,
-      transition.toTarget,
-      progress,
-    );
-    perspectiveCamera.fov = THREE.MathUtils.lerp(
-      transition.fromFov,
-      transition.toFov,
-      progress,
-    );
-    perspectiveCamera.lookAt(targetRef.current);
+    perspectiveCamera.position.set(position.x + driftX, position.y + driftY, position.z + driftZ);
+    target.copy(targetPoint);
+    perspectiveCamera.fov = fov;
+    perspectiveCamera.lookAt(target);
     perspectiveCamera.updateProjectionMatrix();
-
-    if (transition.elapsed === TRANSITION_DURATION) transitionRef.current = null;
   });
-
-  useEffect(() => {
-    window.__cameraNav = {
-      goTo,
-      currentSection: () => currentSection,
-      availableSections: () => [...sectionOrder],
-    };
-
-    return () => {
-      delete window.__cameraNav;
-    };
-  }, [currentSection, goTo]);
 
   return null;
 }

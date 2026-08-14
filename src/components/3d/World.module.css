@@ -1,0 +1,36 @@
+.worldViewport {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 54vw;
+  height: 100vh;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  background: #080808;
+  border-left: 1px solid rgb(225 210 176 / 0.2);
+}
+
+.worldViewport::before {
+  position: absolute;
+  inset: 1.25rem;
+  z-index: 1;
+  border: 1px solid rgb(225 210 176 / 0.12);
+  content: "";
+  pointer-events: none;
+}
+
+@media (max-width: 800px) {
+  .worldViewport {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 58svh;
+    border-left: 0;
+    border-bottom: 1px solid rgb(225 210 176 / 0.2);
+  }
+
+  .worldViewport::before {
+    inset: 0.75rem;
+  }
+}

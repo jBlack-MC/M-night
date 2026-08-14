@@ -6,49 +6,38 @@
  */
 
 import { useEffect, useState } from "react";
-import {
-  cameraPresets,
-  sectionOrder,
-  type SectionName,
-} from "../../data/cameraPresets";
+import { getStoryScene, storyScenes, type StorySceneId } from "../../data/storyScenes";
 import styles from "./Navigation.module.css";
 
 interface NavigationProps {
-  onNavigate?: (section: SectionName) => void;
+  storyProgress: number;
+  onNavigate?: (section: StorySceneId) => void;
 }
 
-export default function Navigation({ onNavigate }: NavigationProps) {
-  const [currentSection, setCurrentSection] = useState<SectionName>("hero");
+export default function Navigation({ storyProgress, onNavigate }: NavigationProps) {
+  const currentSection = getStoryScene(storyProgress);
   const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    const handleSectionChange = (event: Event) => {
-      const section = (event as CustomEvent<SectionName>).detail;
-      setCurrentSection(section);
-    };
-
-    window.addEventListener("camera-section-change", handleSectionChange);
-    return () => window.removeEventListener("camera-section-change", handleSectionChange);
-  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
       const offset = event.key === "ArrowRight" ? 1 : -1;
-      const index = sectionOrder.indexOf(currentSection);
-      const next = sectionOrder[(index + offset + sectionOrder.length) % sectionOrder.length];
-      window.__cameraNav?.goTo(next);
+      const index = storyScenes.indexOf(currentSection);
+      const next = storyScenes[(index + offset + storyScenes.length) % storyScenes.length];
+      const distance = document.documentElement.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: distance * next.start, behavior: "smooth" });
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentSection]);
 
-  const handleNavClick = (sectionName: SectionName) => {
-    if (window.__cameraNav) {
-      window.__cameraNav.goTo(sectionName);
-      onNavigate?.(sectionName);
-    }
+  const handleNavClick = (section: typeof storyScenes[number]) => {
+    const distance = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPosition = distance * section.start;
+
+    window.scrollTo({ top: scrollPosition, behavior: "smooth" });
+    onNavigate?.(section.id);
   };
 
   const toggleVisibility = () => {
@@ -65,21 +54,20 @@ export default function Navigation({ onNavigate }: NavigationProps) {
 
           {/* Navigation Buttons */}
           <div className={styles.sections}>
-            {sectionOrder.map((sectionKey) => {
-              const preset = cameraPresets[sectionKey];
-              const isActive = currentSection === sectionKey;
+            {storyScenes.map((section) => {
+              const isActive = currentSection.id === section.id;
 
               return (
                 <button
-                  key={sectionKey}
+                  key={section.id}
                   className={`${styles.navButton} ${
                     isActive ? styles.active : ""
                   }`}
-                  onClick={() => handleNavClick(sectionKey)}
-                  title={preset.description}
+                  onClick={() => handleNavClick(section)}
+                  title={section.description}
                   aria-current={isActive ? "page" : undefined}
                 >
-                  {preset.label}
+                  {section.label}
                 </button>
               );
             })}
@@ -111,7 +99,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
       {/* Section Indicator */}
       <div className={`${styles.indicator} ${!isVisible ? styles.hidden : ""}`}>
         <span className={styles.label}>
-          {cameraPresets[currentSection]?.description || ""}
+          {currentSection.description}
         </span>
       </div>
     </>
