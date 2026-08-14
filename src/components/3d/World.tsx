@@ -21,10 +21,23 @@ interface WorldProps {
 }
 
 export default function World({ storyProgress }: WorldProps) {
-
   return (
     <>
-      <div className={styles.worldViewport} aria-label="Interactive 3D story scene">
+      <section className={styles.heroLayout}>
+        <div className={styles.heroInfo}>
+          <p className={styles.kicker}>M-NIGHT / SOFTWARE DEVELOPMENT</p>
+          <h1>Building practical software and interactive experiences.</h1>
+          <p className={styles.heroSummary}>
+            I am a software developer focused on learning, building useful interfaces,
+            and exploring 3D web experiences.
+          </p>
+          <div className={styles.heroActions}>
+            <a href="#projects">View projects</a>
+            <a href="#contact">Get in touch</a>
+          </div>
+        </div>
+
+      <div className={styles.worldViewport} aria-label="Interactive 3D portfolio scene">
         <Canvas
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
           onCreated={({ gl }) => {
@@ -71,7 +84,9 @@ export default function World({ storyProgress }: WorldProps) {
             <Pawn progress={storyProgress} />
           </Suspense>
         </Canvas>
+          <div className={styles.sceneCaption}>Interactive 3D scene / scroll to explore</div>
       </div>
+      </section>
 
       <StoryContent storyProgress={storyProgress} />
     </>

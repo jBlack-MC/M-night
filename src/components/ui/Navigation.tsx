@@ -6,39 +6,36 @@
  */
 
 import { useEffect, useState } from "react";
-import { getStoryScene, storyScenes, type StorySceneId } from "../../data/storyScenes";
 import styles from "./Navigation.module.css";
+
+const sections = [
+  { id: "about", label: "About", start: 0.2 },
+  { id: "skills", label: "Skills", start: 0.4 },
+  { id: "projects", label: "Projects", start: 0.58 },
+  { id: "experience", label: "Experience", start: 0.75 },
+  { id: "contact", label: "Contact", start: 0.9 },
+] as const;
 
 interface NavigationProps {
   storyProgress: number;
-  onNavigate?: (section: StorySceneId) => void;
 }
 
-export default function Navigation({ storyProgress, onNavigate }: NavigationProps) {
-  const currentSection = getStoryScene(storyProgress);
+export default function Navigation({ storyProgress }: NavigationProps) {
+  const currentSection = [...sections].reverse().find((section) => storyProgress >= section.start)?.id ?? "about";
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
       const offset = event.key === "ArrowRight" ? 1 : -1;
-      const index = storyScenes.indexOf(currentSection);
-      const next = storyScenes[(index + offset + storyScenes.length) % storyScenes.length];
-      const distance = document.documentElement.scrollHeight - window.innerHeight;
-      window.scrollTo({ top: distance * next.start, behavior: "smooth" });
+      const index = sections.findIndex((section) => section.id === currentSection);
+      const next = sections[(index + offset + sections.length) % sections.length];
+      document.getElementById(next.id)?.scrollIntoView({ behavior: "smooth" });
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentSection]);
-
-  const handleNavClick = (section: typeof storyScenes[number]) => {
-    const distance = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPosition = distance * section.start;
-
-    window.scrollTo({ top: scrollPosition, behavior: "smooth" });
-    onNavigate?.(section.id);
-  };
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -54,8 +51,8 @@ export default function Navigation({ storyProgress, onNavigate }: NavigationProp
 
           {/* Navigation Buttons */}
           <div className={styles.sections}>
-            {storyScenes.map((section) => {
-              const isActive = currentSection.id === section.id;
+            {sections.map((section) => {
+              const isActive = currentSection === section.id;
 
               return (
                 <button
@@ -63,8 +60,8 @@ export default function Navigation({ storyProgress, onNavigate }: NavigationProp
                   className={`${styles.navButton} ${
                     isActive ? styles.active : ""
                   }`}
-                  onClick={() => handleNavClick(section)}
-                  title={section.description}
+                  onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: "smooth" })}
+                  title={`Jump to ${section.label}`}
                   aria-current={isActive ? "page" : undefined}
                 >
                   {section.label}
@@ -99,7 +96,7 @@ export default function Navigation({ storyProgress, onNavigate }: NavigationProp
       {/* Section Indicator */}
       <div className={`${styles.indicator} ${!isVisible ? styles.hidden : ""}`}>
         <span className={styles.label}>
-          {currentSection.description}
+          {sections.find((section) => section.id === currentSection)?.label}
         </span>
       </div>
     </>
