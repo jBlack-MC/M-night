@@ -42,4 +42,4 @@ The portfolio composition list is the authoritative camera model. Navigation scr
 
 ## Accessibility and performance notes
 
-The stage includes screen-reader instructions, visible keyboard focus styles, reduced-motion handling, and capped rendering density. Remaining performance and accessibility work is tracked in the repository issues and requires browser/device verification.
+The stage includes screen-reader instructions, visible keyboard focus styles, reduced-motion handling, capped rendering density, and a visible in-canvas model-loading fallback. Production dependencies are split into React, Three.js, and general vendor chunks for better browser caching. Remaining performance and accessibility work is tracked in the repository issues and requires browser/device verification.
