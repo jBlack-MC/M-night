@@ -1,7 +1,12 @@
+.experienceLayout { width: min(100% - 2rem, 1180px); margin: 0 auto; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-areas: "hero world" "content world"; column-gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+
 .worldViewport {
-  position: relative;
+  position: sticky;
+  top: 1.5rem;
+  grid-area: world;
   width: 100%;
-  min-height: clamp(28rem, 68vh, 46rem);
+  height: min(64vh, 42rem);
+  min-height: 30rem;
   z-index: 1;
   overflow: hidden;
   pointer-events: auto;
@@ -10,15 +15,17 @@
   box-shadow: 0 2rem 6rem rgb(0 0 0 / 0.42);
 }
 
-.heroLayout { width: min(100% - 2rem, 1180px); margin: 0 auto; padding: clamp(6rem, 12vw, 10rem) 0 clamp(5rem, 10vw, 8rem); display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 7vw, 7rem); align-items: center; }
-.heroInfo { max-width: 34rem; }
+.sceneHeader { position: absolute; top: 1rem; left: 1rem; right: 1rem; z-index: 2; display: flex; justify-content: space-between; color: rgb(245 240 228 / .64); font-size: .62rem; letter-spacing: .14em; pointer-events: none; }
+
+.heroInfo { grid-area: hero; position: relative; z-index: 4; max-width: 38rem; margin: -3.5rem 0 0 clamp(1rem, 6vw, 6rem); padding: clamp(1.5rem, 4vw, 3rem); background: rgb(18 21 18 / .94); border: 1px solid rgb(225 210 176 / .3); box-shadow: 0 1.5rem 4rem rgb(0 0 0 / .3); }
 .kicker { color: #d0b978; font-size: .68rem; font-weight: 700; letter-spacing: .16em; }
 .heroInfo h1 { margin: 1.5rem 0; color: #f5f0e4; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.8rem, 5vw, 5.5rem); font-weight: 400; letter-spacing: -.02em; line-height: .98; }
 .heroSummary { max-width: 30rem; color: rgb(245 240 228 / .74); font-size: 1.08rem; line-height: 1.8; }
 .heroActions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
 .heroActions a { padding: .85rem 1.1rem; border: 1px solid rgb(225 210 176 / .32); color: #f5f0e4; text-decoration: none; }
 .heroActions a:first-child { background: #d0b978; border-color: #d0b978; color: #151812; }
-.sceneCaption { position: absolute; right: 1rem; bottom: 1rem; z-index: 2; padding: .65rem .8rem; background: rgb(18 21 18 / .84); color: rgb(245 240 228 / .72); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; }
+.sceneCaption { position: absolute; right: 1rem; bottom: 1rem; z-index: 2; display: flex; gap: .7rem; padding: .65rem .8rem; background: rgb(18 21 18 / .84); color: rgb(245 240 228 / .72); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; pointer-events: none; }
+.sceneCaption span + span { color: #d0b978; }
 
 .worldViewport::before {
   position: absolute;
@@ -30,13 +37,21 @@
 }
 
 @media (max-width: 800px) {
+  .experienceLayout { width: min(100% - 1rem, 40rem); grid-template-columns: 1fr; grid-template-areas: "hero" "world" "content"; column-gap: 0; }
+  .heroInfo { margin: -2rem .75rem 0; padding: 1.5rem; }
   .worldViewport {
+    position: relative;
+    top: 0;
     min-height: 25rem;
+    height: min(64vh, 34rem);
   }
 
   .worldViewport::before {
     inset: 0.75rem;
   }
+
+  .sceneHeader { top: .85rem; left: .85rem; right: .85rem; }
+  .sceneCaption { right: .85rem; bottom: .85rem; flex-direction: column; gap: .25rem; }
 
   .heroLayout { grid-template-columns: 1fr; padding-top: 6rem; }
 }

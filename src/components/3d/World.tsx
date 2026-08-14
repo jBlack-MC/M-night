@@ -5,12 +5,12 @@
  * and the world responds as the user moves through the opening chapters.
  */
 
-import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 
 import CameraController from "./CameraController";
 import Pawn from "./Pawn";
 import GameBoard from "./GameBoard";
+import ThreeDStage from "./ThreeDStage";
 import StoryContent from "../sections/StoryContent";
 import { LIGHTING } from "../../data/sceneConstants";
 import { storyScenes } from "../../data/storyScenes";
@@ -22,34 +22,27 @@ interface WorldProps {
 
 export default function World({ storyProgress }: WorldProps) {
   return (
-    <>
-      <section className={styles.heroLayout}>
-        <div className={styles.heroInfo}>
-          <p className={styles.kicker}>M-NIGHT / SOFTWARE DEVELOPMENT</p>
-          <h1>Building practical software and interactive experiences.</h1>
+    <div className={styles.experienceLayout}>
+        <div className={styles.heroInfo} style={{ gridArea: "hero" }}>
+          <p className={styles.kicker}>CLARITY MASUKU</p>
+          <h1>Software Development Student</h1>
           <p className={styles.heroSummary}>
-            I am a software developer focused on learning, building useful interfaces,
-            and exploring 3D web experiences.
+            Johannesburg, South Africa. Building software across web and application development.
           </p>
           <div className={styles.heroActions}>
             <a href="#projects">View projects</a>
             <a href="#contact">Get in touch</a>
+            <a href="https://github.com/jBlack-MC" target="_blank" rel="noreferrer">GitHub</a>
           </div>
         </div>
 
-      <div className={styles.worldViewport} aria-label="Interactive 3D portfolio scene">
-        <Canvas
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
-          onCreated={({ gl }) => {
-            gl.toneMappingExposure = 1.35;
-          }}
-          camera={{
+      <div className={styles.worldViewport} style={{ gridArea: "world" }}>
+        <ThreeDStage camera={{
             position: storyScenes[0].camera.position,
             fov: storyScenes[0].camera.fov,
             near: 0.01,
             far: 100,
-          }}
-        >
+          }}>
           <fog attach="fog" args={[LIGHTING.backgroundColor, 1.5, 6.5]} />
           <color attach="background" args={[LIGHTING.backgroundColor]} />
 
@@ -80,15 +73,13 @@ export default function World({ storyProgress }: WorldProps) {
           </mesh>
 
           <Suspense fallback={null}>
-            <GameBoard progress={storyProgress} />
+              <GameBoard />
             <Pawn progress={storyProgress} />
           </Suspense>
-        </Canvas>
-          <div className={styles.sceneCaption}>Interactive 3D scene / scroll to explore</div>
+        </ThreeDStage>
       </div>
-      </section>
 
       <StoryContent storyProgress={storyProgress} />
-    </>
+    </div>
   );
 }

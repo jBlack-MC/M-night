@@ -19,7 +19,7 @@ function Experience({ storyProgress }: ExperienceProps) {
 }
 
 function App() {
-  const { active } = useProgress();
+  const { active, progress } = useProgress();
   const scrollProgress = useScrollProgress();
   const [hasStarted, setHasStarted] = useState(false);
 
@@ -33,7 +33,7 @@ function App() {
 
   return (
     <>
-      <LoadingScreen isLoading={isLoading} />
+      <LoadingScreen isLoading={isLoading} progress={progress} />
       <Experience storyProgress={storyProgress} />
     </>
   );

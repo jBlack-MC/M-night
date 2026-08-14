@@ -20,7 +20,7 @@ export const storyScenes = [
     start: 0,
     end: 0.2,
     modelPath: "/models/pawn_solo.glb",
-    camera: { position: [0.16, 0.42, 0.62], target: [0, 0.18, 0], fov: 32 },
+    camera: { position: [0.48, 0.42, 0.82], target: [0.12, 0.12, 0.1], fov: 42 },
   },
   {
     id: "world",
@@ -50,6 +50,15 @@ export const storyScenes = [
 ] satisfies StoryScene[];
 
 export type StorySceneId = (typeof storyScenes)[number]["id"];
+
+export const portfolioCompositions = [
+  { id: "hero", start: 0, camera: { position: [0.48, 0.42, 0.82], target: [0.12, 0.12, 0.1], fov: 42 } },
+  { id: "about", start: 0.2, camera: { position: [0.58, 0.48, 0.9], target: [0.1, 0.12, 0.08], fov: 44 } },
+  { id: "skills", start: 0.4, camera: { position: [0.72, 0.58, 0.96], target: [0.08, 0.08, 0.06], fov: 46 } },
+  { id: "projects", start: 0.58, camera: { position: [0.66, 0.52, 1.02], target: [0.14, 0.1, 0.08], fov: 45 } },
+  { id: "experience", start: 0.75, camera: { position: [0.78, 0.6, 1.08], target: [0.1, 0.1, 0.08], fov: 47 } },
+  { id: "contact", start: 0.9, camera: { position: [0.62, 0.48, 0.94], target: [0.12, 0.12, 0.1], fov: 44 } },
+] as const;
 
 export const getStoryScene = (progress: number): StoryScene => {
   const normalizedProgress = Math.min(Math.max(progress, 0), 1);
