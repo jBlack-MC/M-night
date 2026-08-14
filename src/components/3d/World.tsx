@@ -20,6 +20,15 @@ interface WorldProps {
   storyProgress: number;
 }
 
+function ModelLoadingFallback() {
+  return (
+    <mesh position={[0.208, -0.02, 0.203]}>
+      <cylinderGeometry args={[0.12, 0.12, 0.025, 32]} />
+      <meshStandardMaterial color="#d0b978" emissive="#4a3b16" emissiveIntensity={0.4} />
+    </mesh>
+  );
+}
+
 export default function World({ storyProgress }: WorldProps) {
   return (
     <div className={styles.experienceLayout}>
@@ -72,7 +81,7 @@ export default function World({ storyProgress }: WorldProps) {
             <meshStandardMaterial color="#30322c" transparent opacity={0.68 + storyProgress * 0.08} />
           </mesh>
 
-          <Suspense fallback={null}>
+          <Suspense fallback={<ModelLoadingFallback />}>
               <GameBoard />
             <Pawn progress={storyProgress} />
           </Suspense>
