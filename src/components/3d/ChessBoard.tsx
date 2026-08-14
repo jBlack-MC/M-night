@@ -16,7 +16,7 @@ export default function ChessBoard() {
       const nodesToRemove: THREE.Object3D[] = [];
 
       node.children.forEach((child) => {
-        if (child.name === "Camera") {
+        if (child.name === "Camera" || child.name === "chessboard") {
           nodesToRemove.push(child);
         } else {
           removeUnwantedNodes(child);

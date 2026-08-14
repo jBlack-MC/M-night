@@ -16,42 +16,42 @@ export default function StoryContent({ storyProgress }: StoryContentProps) {
       <section id="about" className={styles.contentSection}>
         <div className={styles.sectionHeading}>
           <p className={styles.eyebrow}>01 / ABOUT</p>
-          <h2>A developer who likes to understand how things work.</h2>
+          <h2>Software development student building across web and application development.</h2>
         </div>
         <div className={styles.aboutGrid}>
-          <p>I build software with a practical mindset: solve the problem, learn quickly, and make the interface useful for the person using it.</p>
-          <div className={styles.infoCard}><span>Current focus</span><strong>React, TypeScript, Three.js, and interactive web systems</strong></div>
-          <div className={styles.infoCard}><span>Approach</span><strong>Clear structure, thoughtful interaction, continuous learning</strong></div>
+          <p>Software Development student with experience building web and application projects using Java, PHP, Laravel, JavaScript, C#, and SQL.</p>
+          <div className={styles.infoCard}><span>Education</span><strong>Rosebank College<br />Software Development<br />First Year</strong></div>
+          <div className={styles.infoCard}><span>Current focus</span><strong>Software architecture, databases, web development, and application development.</strong></div>
         </div>
       </section>
 
       <section id="skills" className={styles.contentSection}>
         <div className={styles.sectionHeading}>
           <p className={styles.eyebrow}>02 / TECHNOLOGIES</p>
-          <h2>Tools I use to turn ideas into working software.</h2>
+          <h2>Technologies I study and use in projects.</h2>
         </div>
         <div className={styles.tagGrid}>
-          {['TypeScript', 'React', 'Three.js', 'JavaScript', 'HTML', 'CSS', 'Vite', 'Git'].map((technology) => <span key={technology}>{technology}</span>)}
+          {['Java', 'JavaScript', 'PHP', 'Laravel', 'MySQL', 'SQL', 'C#', 'HTML', 'CSS', 'React', 'Three.js'].map((technology) => <span key={technology}>{technology}</span>)}
         </div>
       </section>
 
       <section id="projects" className={styles.contentSection}>
         <div className={styles.sectionHeading}>
           <p className={styles.eyebrow}>03 / PROJECTS</p>
-          <h2>Selected work and experiments.</h2>
+          <h2>Projects built for practical problems.</h2>
         </div>
         <div className={styles.projectGrid}>
-          <article className={styles.projectCard}><p className={styles.cardIndex}>01</p><h3>M-Night</h3><p>An interactive React and Three.js portfolio exploring spatial interfaces.</p><span>React / Three.js / TypeScript</span></article>
-          <article className={styles.projectCard}><p className={styles.cardIndex}>02</p><h3>Next project</h3><p>A space for the next useful system, experiment, or product built through iteration.</p><span>In progress</span></article>
+          <article className={styles.projectCard}><p className={styles.cardIndex}>01</p><h3>Pastimes</h3><p>Second-hand clothing marketplace built with Laravel, PHP, MySQL, and Tailwind CSS.</p><span>Laravel / PHP / MySQL / Tailwind CSS</span><a href="https://github.com/jBlack-MC/Pastimes" target="_blank" rel="noreferrer">View repository</a></article>
+          <article className={styles.projectCard}><p className={styles.cardIndex}>02</p><h3>Stardust Literacy</h3><p>Mobile reading application connected to an existing literacy platform and database.</p><span>Mobile application / database integration</span><p className={styles.projectNote}>Public project link unavailable.</p></article>
         </div>
       </section>
 
       <section id="experience" className={styles.contentSection}>
         <div className={styles.sectionHeading}>
           <p className={styles.eyebrow}>04 / EXPERIENCE</p>
-          <h2>Learning through projects, systems, and practice.</h2>
+          <h2>Building experience through study and application.</h2>
         </div>
-        <p className={styles.sectionLead}>This portfolio is an evolving record of the technologies I am studying, the interfaces I am building, and the problems I am learning to solve.</p>
+        <p className={styles.sectionLead}>Currently developing practical experience across software architecture, databases, web development, and application development through coursework and project work.</p>
       </section>
 
       <section id="contact" className={`${styles.contentSection} ${styles.contactSection}`}>
@@ -59,7 +59,10 @@ export default function StoryContent({ storyProgress }: StoryContentProps) {
           <p className={styles.eyebrow}>05 / CONTACT</p>
           <h2>Have a project or idea worth exploring?</h2>
         </div>
-        <p className={styles.contactLink}>Contact details to be added.</p>
+        <div className={styles.contactLinks}>
+          <p className={styles.contactLink}>Direct contact details to be added.</p>
+          <a className={styles.contactLink} href="https://github.com/jBlack-MC" target="_blank" rel="noreferrer">GitHub profile</a>
+        </div>
       </section>
     </main>
   );

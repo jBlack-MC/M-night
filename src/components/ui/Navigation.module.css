@@ -52,6 +52,9 @@
   align-items: center;
 }
 
+.githubLink { color: #d0b978; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+.githubLink:hover, .githubLink:focus-visible { color: #fff; text-decoration: underline; text-underline-offset: .25rem; }
+
 .navButton {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -168,11 +171,3 @@
   white-space: nowrap;
 }
 
-/* Keyboard shortcuts hint */
-@media (min-width: 1025px) {
-  .indicator::after {
-    content: " · Use arrow keys to navigate";
-    opacity: 0.6;
-    font-size: 12px;
-  }
-}

@@ -5,16 +5,16 @@
  * Shows pawn icon, loading text, and progress indicator.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styles from "./LoadingScreen.module.css";
 
 interface LoadingScreenProps {
   isLoading: boolean;
+  progress: number;
   onComplete?: () => void;
 }
 
-export default function LoadingScreen({ isLoading, onComplete }: LoadingScreenProps) {
-  const [progress, setProgress] = useState(0);
+export default function LoadingScreen({ isLoading, progress, onComplete }: LoadingScreenProps) {
   const showMessage = !isLoading;
 
   useEffect(() => {
@@ -25,22 +25,15 @@ export default function LoadingScreen({ isLoading, onComplete }: LoadingScreenPr
       }, 1500);
 
       return () => clearTimeout(timer);
-    } else {
-      // Simulate loading progress
-      let current = 0;
-      const interval = setInterval(() => {
-        current += Math.random() * 35;
-        if (current > 90) current = 90;
-        setProgress(Math.min(current, 100));
-      }, 500);
-
-      return () => clearInterval(interval);
     }
   }, [isLoading, onComplete]);
 
   return (
     <div
       className={styles.loadingScreen}
+      role="status"
+      aria-live="polite"
+      aria-busy={isLoading}
       style={{
         opacity: showMessage ? 0 : 1,
         pointerEvents: showMessage ? "none" : "auto",
@@ -51,7 +44,7 @@ export default function LoadingScreen({ isLoading, onComplete }: LoadingScreenPr
 
         <div className={styles.text}>
           <p className={styles.loading}>
-            {showMessage ? "YOUR MOVE" : "LOADING THE BOARD"}
+            {showMessage ? "READY TO EXPLORE" : "LOADING EXPERIENCE"}
           </p>
             {!showMessage && <div className={styles.progress}>{Math.round(progress)}%</div>}
         </div>

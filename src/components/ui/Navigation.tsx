@@ -47,7 +47,7 @@ export default function Navigation({ storyProgress }: NavigationProps) {
       <nav className={`${styles.nav} ${!isVisible ? styles.hidden : ""}`}>
         <div className={styles.container}>
           {/* Logo/Title */}
-          <div className={styles.logo}>M-Night</div>
+          <div className={styles.logo}>Clarity Masuku</div>
 
           {/* Navigation Buttons */}
           <div className={styles.sections}>
@@ -69,6 +69,8 @@ export default function Navigation({ storyProgress }: NavigationProps) {
               );
             })}
           </div>
+
+          <a className={styles.githubLink} href="https://github.com/jBlack-MC" target="_blank" rel="noreferrer">GitHub</a>
 
           {/* Toggle Button */}
           <button

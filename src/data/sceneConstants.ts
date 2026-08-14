@@ -64,9 +64,10 @@ export const LIGHTING = {
 export const MODEL_TRANSFORMS = {
   /** Calibrated from the exported GLB bounds into one shared world. */
   pawn: {
-    start: [0.011, 0.212, 0.01] as [number, number, number],
-    end: [0.19, 0.212, 0.01] as [number, number, number],
-    scale: 0.045,
+    // GLB bounds: local base y ~= 3.5616; board surface is world y ~= -0.05.
+    start: [0.158, -0.139, 0.203] as [number, number, number],
+    end: [0.258, -0.139, 0.203] as [number, number, number],
+    scale: 0.025,
     rotation: [0, 0, 0] as [number, number, number],
   },
 
